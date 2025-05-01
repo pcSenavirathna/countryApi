@@ -19,6 +19,10 @@ mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopol
 // Routes
 app.use('/api/users', userRoutes);
 app.use('/api/favorites', favoriteCountryRoutes);
+app.get('/', (req, res) => {
+  res.send('API is running...');
+}
+);
 
 // Start Server
 const PORT = process.env.PORT || 5000;
