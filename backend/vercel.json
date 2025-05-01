@@ -1,26 +1,14 @@
 {
-	"version": 2,
 	"builds": [
-	  {
-		"src": "countryinfoweb/package.json",
-		"use": "@vercel/static-build",
-		"config": {
-		  "distDir": "build"
+		{
+			"src": "./server.js",
+			"use": "@vercel/node"
 		}
-	  },
-	  {
-		"src": "backend/server.js",
-		"use": "@vercel/node"
-	  }
 	],
 	"routes": [
-	  {
-		"src": "/api/(.*)",
-		"dest": "/backend/server.js"
-	  },
-	  {
-		"src": "/(.*)",
-		"dest": "/countryinfoweb/build/$1"
-	  }
+		{
+			"src": "/(.*)",
+			"dest": "/server.js"
+		}
 	]
-  }
+}
