@@ -9,7 +9,6 @@ export default function Home() {
   const [countries, setCountries] = useState([]);
   const [filtered, setFiltered] = useState([]);
   const [popularCountries, setPopularCountries] = useState([]);
-  const [favorites, setFavorites] = useState([]);
   const isAuthenticated = !!localStorage.getItem('authToken');
   const userId = localStorage.getItem('userId');
 
