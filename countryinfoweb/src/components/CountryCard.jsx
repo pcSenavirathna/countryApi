@@ -9,7 +9,8 @@ export default function CountryCard({ country, isAuthenticated, userId }) {
   useEffect(() => {
     const fetchFavorites = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/favorites/${userId}`);
+        const serverUrl = process.env.REACT_APP_SERVER_URL;
+        const response = await axios.get(`${serverUrl}/api/favorites/${userId}`);
         const favoriteCountries = response.data;
 
         const isFav = favoriteCountries.some((fav) => fav.cca3 === country.cca3);
@@ -31,7 +32,8 @@ export default function CountryCard({ country, isAuthenticated, userId }) {
     }
 
     try {
-      const response = await axios.post('http://localhost:5000/api/favorites/toggle', {
+      const serverUrl = process.env.REACT_APP_SERVER_URL;
+      const response = await axios.post(`${serverUrl}/api/favorites/toggle`, {
         userId,
         country: {
           cca3: country.cca3,

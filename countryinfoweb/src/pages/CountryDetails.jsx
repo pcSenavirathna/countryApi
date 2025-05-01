@@ -14,6 +14,7 @@ export default function CountryDetails() {
 	const userId = localStorage.getItem('userId');
 
 	useEffect(() => {
+		const serverUrl = process.env.REACT_APP_SERVER_URL;
 		axios
 			.get(`https://restcountries.com/v3.1/alpha/${code}`)
 			.then((res) => {
@@ -22,7 +23,7 @@ export default function CountryDetails() {
 				// Check if the country is already in favorites
 				if (isAuthenticated) {
 					axios
-						.get(`http://localhost:5000/api/favorites/${userId}`)
+						.get(`${serverUrl}/api/favorites/${userId}`)
 						.then((response) => {
 							const favoriteCountries = response.data;
 							const isFav = favoriteCountries.some((fav) => fav.cca3 === res.data[0].cca3);
@@ -41,7 +42,8 @@ export default function CountryDetails() {
 		}
 
 		try {
-			const response = await axios.post('http://localhost:5000/api/favorites/toggle', {
+			const serverUrl = process.env.REACT_APP_SERVER_URL;
+			const response = await axios.post(`${serverUrl}/api/favorites/toggle`, {
 				userId,
 				country: {
 					cca3: country.cca3,

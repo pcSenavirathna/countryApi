@@ -12,7 +12,8 @@ export default function Login({ onLogin }) {
     e.preventDefault();
 
     try {
-      const response = await axios.post('http://localhost:5000/api/users/login', {
+      const serverUrl = process.env.REACT_APP_SERVER_URL;
+      const response = await axios.post(`${serverUrl}/api/users/login`, {
         identifier,
         password,
       });

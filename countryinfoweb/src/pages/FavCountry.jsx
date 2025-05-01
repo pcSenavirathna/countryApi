@@ -10,7 +10,8 @@ const FavCountry = () => {
 	useEffect(() => {
 		const fetchFavorites = async () => {
 			try {
-				const response = await axios.get(`http://localhost:5000/api/favorites/${userId}`);
+				const serverUrl = process.env.REACT_APP_SERVER_URL;
+				const response = await axios.get(`${serverUrl}/api/favorites/${userId}`);
 				console.log('Fetched favorites:', response.data); // Log the data structure
 				setFavorites(response.data);
 			} catch (err) {
