@@ -42,8 +42,8 @@ export default function Home() {
       }
     };
 
-    const interval = setInterval(autoScroll, 50);
-    return () => clearInterval(interval); 
+    // const interval = setInterval(autoScroll, 50);
+    // return () => clearInterval(interval); 
   }, [popularCountries]);
 
   const handleSearch = (query) => {
