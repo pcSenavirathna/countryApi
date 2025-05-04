@@ -20,7 +20,6 @@ export default function CountryDetails() {
 			.then((res) => {
 				setCountry(res.data[0]);
 
-				// Check if the country is already in favorites
 				if (isAuthenticated) {
 					axios
 						.get(`${serverUrl}/api/favorites/${userId}`)
@@ -64,22 +63,22 @@ export default function CountryDetails() {
 
 	if (!country) return <p className="p-4 text-center text-gray-500">Loading country details...</p>;
 
-	// Extract additional details
+
 	const currencies = country.currencies
 		? Object.values(country.currencies)
 			.map((currency) => `${currency.name} (${currency.symbol})`)
 			.join(', ')
 		: 'N/A';
 
-	const demonym = country.demonyms?.eng?.m || 'N/A'; // How a citizen is called
+	const demonym = country.demonyms?.eng?.m || 'N/A';
 	const callingCode = country.idd?.root
 		? `${country.idd.root}${country.idd.suffixes?.[0] || ''}`
-		: 'N/A'; // Calling code
+		: 'N/A';
 	const translations = country.translations
 		? Object.values(country.translations)
 			.map((translation) => translation.common)
 			.join(', ')
-		: 'N/A'; // Translation names
+		: 'N/A'; 
 
 	return (
 		<div
@@ -101,7 +100,7 @@ export default function CountryDetails() {
 					<img
 						src={country.flags.svg}
 						alt={`${country.name.common} flag`}
-						className="w-100 h-60 object-contain"
+						className="w-100 h-60 object-contain border-2 border-gray-400 rounded" // Added border styles
 					/>
 				</div>
 			</div>

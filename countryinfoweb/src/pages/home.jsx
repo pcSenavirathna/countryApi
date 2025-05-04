@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { Link } from 'react-router-dom'; // Import Link from react-router-dom
 import CountryCard from '../components/CountryCard';
 import SearchBar from '../components/SearchBar';
 import Filter from '../components/Filter';
@@ -11,6 +12,12 @@ export default function Home() {
   const [popularCountries, setPopularCountries] = useState([]);
   const isAuthenticated = !!localStorage.getItem('authToken');
   const userId = localStorage.getItem('userId');
+
+  useEffect(() => {
+    return () => {
+      sessionStorage.removeItem('shouldReload');
+    };
+  }, []);
 
   useEffect(() => {
     axios
@@ -36,13 +43,13 @@ export default function Home() {
         scrollContainer.scrollLeft = scrollAmount;
 
         if (scrollAmount >= scrollContainer.scrollWidth - scrollContainer.clientWidth) {
-          scrollAmount = 0; // Reset scroll
+          scrollAmount = 0; 
         }
       }
     };
 
-    const interval = setInterval(autoScroll, 50); // Adjust interval speed
-    return () => clearInterval(interval); // Cleanup on component unmount
+    const interval = setInterval(autoScroll, 50);
+    return () => clearInterval(interval); 
   }, [popularCountries]);
 
   const handleSearch = (query) => {
@@ -83,8 +90,9 @@ export default function Home() {
       <div className="horizontal-scroll overflow-x-auto whitespace-nowrap mb-6 no-scrollbar">
         <div className="flex space-x-4">
           {popularCountries.map((country) => (
-            <div
+            <Link
               key={country.cca3}
+              to={`/country/${country.cca3}`} // Navigate to the CountryDetails page
               className="inline-block bg-white dark:bg-gray-800 border-[2px] dark:border-gray-700 text-white dark:text-white p-4 rounded shadow hover:shadow-lg transition-transform transform hover:scale-105"
               style={{
                 background: 'rgba(255, 255, 255, 0.1)',
@@ -102,7 +110,7 @@ export default function Home() {
               <p className="text-sm text-white dark:text-white">
                 Population: {country.population.toLocaleString()}
               </p>
-            </div>
+            </Link>
           ))}
         </div>
       </div>

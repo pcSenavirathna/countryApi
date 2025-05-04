@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import bgimg from '../assets/logbg.jpg';
 
 export default function Login({ onLogin }) {
-  const [identifier, setIdentifier] = useState(''); // Can be username or email
+  const [identifier, setIdentifier] = useState(''); 
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
 
@@ -30,7 +30,7 @@ export default function Login({ onLogin }) {
       navigate('/');
     } catch (err) {
       if (err.response && err.response.data && err.response.data.message) {
-        alert(err.response.data.message); // Display server error message
+        alert(err.response.data.message);
       } else {
         alert('An error occurred. Please try again later.');
       }

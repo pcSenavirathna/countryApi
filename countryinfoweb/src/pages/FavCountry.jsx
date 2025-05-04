@@ -4,31 +4,63 @@ import FavCountryCard from '../components/favCountrycard';
 
 const FavCountry = () => {
   const [favorites, setFavorites] = useState([]);
-  const isAuthenticated = !!localStorage.getItem('authToken');
-  const userId = localStorage.getItem('userId');
+	const [isLoading, setIsLoading] = useState(true);
+	const [isAuthenticated, setIsAuthenticated] = useState(false);
+	const [userId, setUserId] = useState(null);
+
+	useEffect(() => {
+		const authToken = localStorage.getItem('authToken');
+		const storedUserId = localStorage.getItem('userId');
+		if (authToken && storedUserId) {
+			setIsAuthenticated(true);
+			setUserId(storedUserId);
+		} else {
+			setIsAuthenticated(false);
+		}
+	}, []);
 
 	useEffect(() => {
 		const fetchFavorites = async () => {
+			const serverUrl = process.env.REACT_APP_SERVER_URL;
 			try {
-				const serverUrl = process.env.REACT_APP_SERVER_URL;
+				setIsLoading(true);
 				const response = await axios.get(`${serverUrl}/api/favorites/${userId}`);
-				console.log('Fetched favorites:', response.data); // Log the data structure
+				console.log('Fetched favorites:', response.data);
 				setFavorites(response.data);
 			} catch (err) {
 				console.error('Error fetching favorite countries:', err);
+			} finally {
+				setIsLoading(false);
 			}
 		};
 
-		if (isAuthenticated) {
+		if (isAuthenticated && userId) {
 			fetchFavorites();
 		}
-
 	}, [isAuthenticated, userId]);
+
+	useEffect(() => {
+		const shouldReload = sessionStorage.getItem('shouldReload');
+		if (!shouldReload) {
+			sessionStorage.setItem('shouldReload', 'true');
+			setTimeout(() => {
+				window.location.reload();
+			}, 1000);
+		}
+	}, []);
 
 	if (!isAuthenticated) {
 		return (
 			<div className="p-6 text-center text-red-500">
 				<h2 className="text-2xl font-bold">Please log in to view your favorite countries.</h2>
+			</div>
+		);
+	}
+
+	if (isLoading) {
+		return (
+			<div className="p-6 text-center text-gray-500">
+				<h2 className="text-xl font-bold">Loading your favorite countries...</h2>
 			</div>
 		);
 	}
@@ -45,9 +77,9 @@ const FavCountry = () => {
               key={country.cca3}
 				  country={{
 					  ...country,
-					  name: { common: country.name }, // Map `name` to `name.common`
-					  capital: Array.isArray(country.capital) ? country.capital : [country.capital], // Ensure `capital` is an array
-					  flags: { svg: country.flag }, // Map `flag` to `flags.svg`
+					  name: { common: country.name },
+					  capital: Array.isArray(country.capital) ? country.capital : [country.capital],
+					  flags: { svg: country.flag },
 				  }}
               isAuthenticated={isAuthenticated}
               userId={userId}

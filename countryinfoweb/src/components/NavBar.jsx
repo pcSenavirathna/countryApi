@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import useDarkMode from '../hooks/useDarkMode';
 
 export default function Navbar({ isAuthenticated, username, onLogout }) {
   const [darkMode, setDarkMode] = useDarkMode();
+  const [menuOpen, setMenuOpen] = useState(false);
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -13,13 +14,12 @@ export default function Navbar({ isAuthenticated, username, onLogout }) {
     window.location.reload();
   };
 
-  const handlefavcountry = () =>{
-    navigate("/favcountry")
-  } 
-  
+  const handlefavcountry = () => {
+    navigate('/favcountry');
+  };
 
   return (
-    <nav className="bg-gradient-to-r from-indigo-700 via-indigo-600 to-indigo-400 dark:from-gray-800 dark:to-gray-900 text-white p-4 shadow-md flex justify-between items-center">
+    <nav className="bg-gradient-to-r from-indigo-700 via-indigo-600 to-indigo-400 dark:from-gray-800 dark:to-gray-900 text-white p-4 shadow-md flex justify-between items-center relative">
       <Link
         to="/"
         className="text-2xl font-bold tracking-wide hover:scale-105 transition-transform"
@@ -41,6 +41,8 @@ export default function Navbar({ isAuthenticated, username, onLogout }) {
             {darkMode ? '🌞' : '🌙'}
           </div>
         </div>
+
+        {/* Favorites Button */}
         {isAuthenticated && (
           <button
             className={`text-2xl text-red-500 transition-colors`}
@@ -50,9 +52,74 @@ export default function Navbar({ isAuthenticated, username, onLogout }) {
           </button>
         )}
 
-        {/* Conditional Rendering */}
-        {isAuthenticated ? (
-          <>
+        {/* Hamburger Menu for Mobile */}
+        <div className="relative lg:hidden">
+          <button
+            onClick={() => setMenuOpen(!menuOpen)}
+            className="text-white text-2xl focus:outline-none"
+          >
+            ☰
+          </button>
+
+          {/* Overlay and Menu */}
+          {menuOpen && (
+            <>
+              {/* Background Overlay */}
+              <div
+                className="fixed inset-0 bg-black bg-opacity-50 z-10"
+                onClick={() => setMenuOpen(false)} // Close menu when clicking outside
+              ></div>
+
+              {/* Dropdown Menu */}
+              <div className="absolute right-0 mt-2 w-40 bg-white dark:bg-gray-800 text-black dark:text-white rounded-lg shadow-lg z-20">
+                {!isAuthenticated ? (
+                  <>
+                    <Link
+                      to="/login"
+                      className="block px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700"
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      Login
+                    </Link>
+                    <Link
+                      to="/signup"
+                      className="block px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700"
+                      onClick={() => setMenuOpen(false)}
+                    >
+                      Signup
+                    </Link>
+                  </>
+                ) : (
+                  <button
+                    onClick={handleLogout}
+                    className="block w-full text-left px-4 py-2 hover:bg-gray-200 dark:hover:bg-gray-700"
+                  >
+                    Logout
+                  </button>
+                )}
+              </div>
+            </>
+          )}
+        </div>
+
+        {/* Desktop Buttons */}
+        <div className="hidden lg:flex items-center space-x-4">
+          {!isAuthenticated ? (
+            <>
+              <Link
+                to="/login"
+                className="bg-white font-bold text-black px-4 py-2 rounded-xl hover:bg-gray-300 transition"
+              >
+                Login
+              </Link>
+              <Link
+                to="/signup"
+                className="bg-white font-bold text-black px-4 py-2 rounded-xl hover:bg-gray-300 transition"
+              >
+                Signup
+              </Link>
+            </>
+          ) : (
             <div className="relative group flex items-center space-x-2 cursor-pointer">
               <div className="w-8 h-8 bg-red-500 rounded-full flex items-center justify-center text-white font-bold">
                 {username.charAt(0).toUpperCase()}
@@ -80,24 +147,9 @@ export default function Navbar({ isAuthenticated, username, onLogout }) {
                   Logout
                 </button>
               </div>
-            </div>
-          </>
-        ) : (
-          <>
-            <Link
-              to="/login"
-              className="bg-white font-bold text-black px-4 py-2 rounded-xl hover:bg-gray-300 transition"
-            >
-              Login
-            </Link>
-            <Link
-              to="/signup"
-              className="bg-white font-bold text-black px-4 py-2 rounded-xl hover:bg-gray-300 transition"
-            >
-              Signup
-            </Link>
-          </>
-        )}
+              </div>
+          )}
+        </div>
       </div>
     </nav>
   );
