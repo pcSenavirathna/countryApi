@@ -14,12 +14,6 @@ export default function Home() {
   const userId = localStorage.getItem('userId');
 
   useEffect(() => {
-    return () => {
-      sessionStorage.removeItem('shouldReload');
-    };
-  }, []);
-
-  useEffect(() => {
     axios
       .get('https://restcountries.com/v3.1/all')
       .then((res) => {

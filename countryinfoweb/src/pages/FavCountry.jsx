@@ -17,14 +17,14 @@ const FavCountry = () => {
 		} else {
 			setIsAuthenticated(false);
 		}
-	}, []);
+	}, []); 
 
 	useEffect(() => {
 		const fetchFavorites = async () => {
-			const serverUrl = process.env.REACT_APP_SERVER_URL;
+			const SERVER_URL = process.env.REACT_APP_SERVER_URL;
 			try {
 				setIsLoading(true);
-				const response = await axios.get(`${serverUrl}/api/favorites/${userId}`);
+				const response = await axios.get(`${SERVER_URL}/api/favorites/${userId}`);
 				console.log('Fetched favorites:', response.data);
 				setFavorites(response.data);
 			} catch (err) {
@@ -37,17 +37,7 @@ const FavCountry = () => {
 		if (isAuthenticated && userId) {
 			fetchFavorites();
 		}
-	}, [isAuthenticated, userId]);
-
-	useEffect(() => {
-		const shouldReload = sessionStorage.getItem('shouldReload');
-		if (!shouldReload) {
-			sessionStorage.setItem('shouldReload', 'true');
-			setTimeout(() => {
-				window.location.reload();
-			}, 1000);
-		}
-	}, []);
+	}, [isAuthenticated, userId]); // Trigger fetch when isAuthenticated or userId changes
 
 	if (!isAuthenticated) {
 		return (
