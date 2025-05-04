@@ -9,8 +9,8 @@ export default function CountryCard({ country, isAuthenticated, userId }) {
   useEffect(() => {
     const fetchFavorites = async () => {
       try {
-        const serverUrl = process.env.REACT_APP_SERVER_URL;
-        const response = await axios.get(`${serverUrl}/api/favorites/${userId}`);
+        const SERVER_URL = process.env.REACT_APP_SERVER_URL;
+        const response = await axios.get(`${SERVER_URL}/api/favorites/${userId}`);
         const favoriteCountries = response.data;
 
         const isFav = favoriteCountries.some((fav) => fav.cca3 === country.cca3);
@@ -32,8 +32,8 @@ export default function CountryCard({ country, isAuthenticated, userId }) {
     }
 
     try {
-      const serverUrl = process.env.REACT_APP_SERVER_URL;
-      const response = await axios.post(`${serverUrl}/api/favorites/toggle`, {
+      const SERVER_URL = process.env.REACT_APP_SERVER_URL;
+      const response = await axios.post(`${SERVER_URL}/api/favorites/toggle`, {
         userId,
         country: {
           cca3: country.cca3,
@@ -54,6 +54,7 @@ export default function CountryCard({ country, isAuthenticated, userId }) {
   return (
     <div
       className="bg-indigo-200 dark:bg-gray-800 border-[2px] dark:border-gray-700 text-black dark:text-white p-4 rounded shadow hover:shadow-2xl transition-all transform hover:-translate-y-2 relative"
+      onClick={() => navigate(`/country/${country.cca3}`)}
     >
       {/* Flag */}
       <div className="overflow-hidden rounded">
@@ -73,18 +74,10 @@ export default function CountryCard({ country, isAuthenticated, userId }) {
       <p>
         <strong>Region:</strong> {country.region || 'N/A'}
       </p>
-      <button
-        onClick={() => navigate(`/country/${country.cca3}`)}
-        className="mt-4 bg-indigo-500 text-white px-4 py-2 rounded hover:bg-indigo-400 transition"
-      >
-        View Details
-      </button>
-
       {/* Heart Icon */}
       <div
         onClick={handleFavoriteClick}
-        className={`absolute bottom-4 right-4 cursor-pointer text-2xl ${isFavorite ? 'text-red-500' : 'text-gray-400'
-          } transition-colors`}
+        className={`absolute bottom-4 right-4 cursor-pointer text-2xl flex items-center justify-center w-12 h-12 rounded-full backdrop-blur-md bg-white/30 border border-white/50 shadow-lg ${isFavorite ? 'text-red-500' : 'text-gray-400'} transition-colors hover:bg-white/50 hover:scale-110`}
       >
         {isFavorite ? '❤️' : '🤍'}
       </div>
