@@ -75,12 +75,17 @@ export default function CountryCard({ country, isAuthenticated, userId }) {
         <strong>Region:</strong> {country.region || 'N/A'}
       </p>
       {/* Heart Icon */}
-      <div
-        onClick={handleFavoriteClick}
+      <button
+        type="button"
+        onClick={(e) => {
+          e.stopPropagation();
+          handleFavoriteClick();
+        }}
         className={`absolute bottom-4 right-4 cursor-pointer text-2xl flex items-center justify-center w-12 h-12 rounded-full backdrop-blur-md bg-white/30 border border-white/50 shadow-lg ${isFavorite ? 'text-red-500' : 'text-gray-400'} transition-colors hover:bg-white/50 hover:scale-110`}
+        aria-label={isFavorite ? 'Remove from favorites' : 'Add to favorites'}
       >
         {isFavorite ? '❤️' : '🤍'}
-      </div>
+      </button>
     </div>
   );
 }

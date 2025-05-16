@@ -1,4 +1,5 @@
 const FavoriteCountry = require('../models/FavoriteCountry');
+const mongoose = require('mongoose');
 
 // Add or Remove Favorite Country
 const toggleFavoriteCountry = async (req, res) => {
@@ -41,12 +42,16 @@ const toggleFavoriteCountry = async (req, res) => {
 const getFavoriteCountries = async (req, res) => {
   const { userId } = req.params;
 
+  // Validate userId
+  if (!mongoose.Types.ObjectId.isValid(userId)) {
+    return res.status(400).json({ message: 'Invalid user ID' });
+  }
+
   try {
     const favoriteDoc = await FavoriteCountry.findOne({ userId });
     if (!favoriteDoc) {
-      return res.status(200).json([]); // Return an empty array if no favorites exist
+      return res.status(200).json([]);
     }
-
     res.status(200).json(favoriteDoc.countries);
   } catch (err) {
     console.error('Error fetching favorite countries:', err);
