@@ -9,7 +9,7 @@ dotenv.config();
 
 const app = express();
 app.use(cors({
-  origin: 'https://country-api-seven-psi.vercel.app', // Replace with your frontend URL
+  origin: 'https://country-api-seven-psi.vercel.app/*',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true,
 }));
