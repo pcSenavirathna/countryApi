@@ -9,7 +9,7 @@ dotenv.config();
 
 const app = express();
 app.use(cors({
-  origin: 'https://country-api-seven-psi.vercel.app/**',
+  origin: 'https://eccountryapp.netlify.app/**',
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true,
 }));
